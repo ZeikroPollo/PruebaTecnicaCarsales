@@ -1,0 +1,19 @@
+<div class="container">
+
+  <h2>Listado de Episodios</h2>
+
+  <div class="pagination">
+    <button (click)="prevPage()">Anterior</button>
+    <span>Página {{ currentPage() }} de {{ totalPages() }}</span>
+    <button (click)="nextPage()">Siguiente</button>
+  </div>
+
+  <ul class="episodes">
+    <li *ngFor="let ep of episodes()">
+      <strong>{{ ep.episodeCode }}</strong> — {{ ep.name }}
+      <br>
+      <small>Emitido: {{ ep.airDate }}</small>
+    </li>
+  </ul>
+
+</div>

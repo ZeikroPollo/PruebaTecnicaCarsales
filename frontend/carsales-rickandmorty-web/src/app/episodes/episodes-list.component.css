@@ -1,0 +1,25 @@
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 10px;
+  font-family: Arial;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.episodes {
+  list-style: none;
+  padding: 0;
+}
+
+.episodes li {
+  background: #fafafa;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
