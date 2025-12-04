@@ -1,0 +1,42 @@
+<div class="page">
+  <div class="card">
+    <h2 class="title">Listado de Episodios</h2>
+
+    <div class="toolbar">
+      <button (click)="prevPage()"
+              [disabled]="currentPage() === 1 || loading()">
+        Anterior
+      </button>
+
+      <span class="page-info">
+        Página {{ currentPage() }} de {{ totalPages() }}
+      </span>
+
+      <button (click)="nextPage()"
+              [disabled]="currentPage() === totalPages() || loading()">
+        Siguiente
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="state state--info" *ngIf="loading()">
+      Cargando episodios...
+    </div>
+
+    <!-- Error -->
+    <div class="state state--error" *ngIf="error()">
+      {{ error() }}
+    </div>
+
+    <!-- Lista -->
+    <ul class="episode-list" *ngIf="!loading() && !error()">
+      <li class="episode-item" *ngFor="let ep of episodes()">
+        <div class="episode-code">{{ ep.episodeCode }}</div>
+        <div class="episode-main">
+          <div class="episode-name">{{ ep.name }}</div>
+          <div class="episode-date">Emitido: {{ ep.airDate }}</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
