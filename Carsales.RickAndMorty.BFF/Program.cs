@@ -1,15 +1,40 @@
+using Carsales.RickAndMorty.BFF.Clients;
+using Carsales.RickAndMorty.BFF.Endpoints;
+using Carsales.RickAndMorty.BFF.Middleware;
+using Carsales.RickAndMorty.BFF.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configuración tipada para la API externa
+builder.Services.Configure<RickAndMortyApiOptions>(
+    builder.Configuration.GetSection(RickAndMortyApiOptions.SectionName));
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Cliente HTTP hacia Rick and Morty
+builder.Services.AddHttpClient<IRickAndMortyApiClient, RickAndMortyApiClient>();
+
+// Servicios de dominio
+builder.Services.AddScoped<IEpisodeService, EpisodeService>();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// CORS para frontend Angular dev
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware global de manejo de errores
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -17,9 +42,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAngularDev");
 
-app.UseAuthorization();
-
-app.MapControllers();
+// Endpoints minimal API
+EpisodeEndpoints.Map(app);
 
 app.Run();
